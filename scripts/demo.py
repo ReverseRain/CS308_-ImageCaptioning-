@@ -13,11 +13,11 @@ from models.model import ImageCaptioningModel
 def parse_args():
     parser = argparse.ArgumentParser(description="图像描述生成演示")
     
-    parser.add_argument("--model_path", type=str, required=True, help="模型路径")
-    parser.add_argument("--image_path", type=str, required=True, help="图像路径")
-    parser.add_argument("--prompt", type=str, default="请为这张图片生成描述：", help="生成提示")
+    parser.add_argument("-m", "--model_path", type=str, required=True, help="模型路径")
+    parser.add_argument("-i", "--image_path", type=str, required=True, help="图像路径")
+    parser.add_argument("-p", "--prompt", type=str, default="请为这张图片生成描述：", help="生成提示")
     parser.add_argument("--max_length", type=int, default=50, help="生成的最大长度")
-    parser.add_argument("--output_path", type=str, default=None, help="输出图像路径（可选）")
+    parser.add_argument("-o", "--output_path", type=str, default=None, help="输出图像路径（可选）")
     
     return parser.parse_args()
 

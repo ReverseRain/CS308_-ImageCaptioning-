@@ -51,8 +51,14 @@ class ImageCaptioningModel(nn.Module):
         # 构建连接器
         self.projector = build_projector(self.config).to(self.device)
         
-        # 加载tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(config.language_model_name)
+        # 加载tokenizer - 检查是否有单独的tokenizer路径
+        tokenizer_path = getattr(config, "tokenizer_path", None)
+        if tokenizer_path and os.path.exists(tokenizer_path):
+            # 如果有tokenizer_path且目录存在，从该路径加载
+            self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+        else:
+            # 否则从语言模型路径加载
+            self.tokenizer = AutoTokenizer.from_pretrained(config.language_model_name)
         
         # 添加图像标记
         self.image_token = config.image_token
@@ -137,6 +143,7 @@ class ImageCaptioningModel(nn.Module):
         prompt_with_image = f"{prompt} {self.image_token}"
         inputs = self.tokenizer(prompt_with_image, return_tensors="pt")
         input_ids = inputs["input_ids"].to(self.device)
+        attention_mask = inputs["attention_mask"].to(self.device)
         
         # 处理图像
         image_features = self.vision_encoder(pixel_values)
@@ -150,13 +157,20 @@ class ImageCaptioningModel(nn.Module):
         for pos in image_positions:
             text_embeds[0, pos] = projected_features[0].mean(dim=0)
         
+        # 确保tokenizer有pad_token_id
+        if self.tokenizer.pad_token_id is None:
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+        
         # 生成文本
         with torch.no_grad():
             outputs = self.language_model.generate(
                 inputs_embeds=text_embeds,
-                max_length=max_length,
+                attention_mask=attention_mask,
+                max_length=max_length,  # 只使用max_length参数
                 num_beams=5,
-                early_stopping=True
+                early_stopping=True,
+                pad_token_id=self.tokenizer.pad_token_id,
+                eos_token_id=self.tokenizer.eos_token_id
             )
         
         # 解码生成的文本
@@ -183,7 +197,12 @@ class ImageCaptioningModel(nn.Module):
             json.dump(self.config.to_dict(), f, indent=2)
         
         # 保存视觉编码器
-        self.vision_encoder.vision_model.save_pretrained(os.path.join(save_dir, "vision_encoder"))
+        vision_encoder_dir = os.path.join(save_dir, "vision_encoder")
+        os.makedirs(vision_encoder_dir, exist_ok=True)
+        self.vision_encoder.vision_model.save_pretrained(vision_encoder_dir)
+        
+        # 保存图像处理器
+        self.vision_encoder.image_processor.save_pretrained(vision_encoder_dir)
         
         # 保存语言模型
         self.language_model.save_pretrained(os.path.join(save_dir, "language_model"))
@@ -218,6 +237,7 @@ class ImageCaptioningModel(nn.Module):
         # 更新模型路径
         config.vision_model_name = os.path.join(model_path, "vision_encoder")
         config.language_model_name = os.path.join(model_path, "language_model")
+        config.tokenizer_path = os.path.join(model_path, "tokenizer")
         
         # 创建模型
         model = cls(config)

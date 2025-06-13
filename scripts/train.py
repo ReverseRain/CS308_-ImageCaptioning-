@@ -32,7 +32,7 @@ def parse_args():
     
     # 模型参数
     parser.add_argument("--vision_model", type=str, default="openai/clip-vit-base-patch16", help="视觉模型名称")
-    parser.add_argument("--language_model", type=str, default="Qwen/Qwen1.5-0.5B", help="语言模型名称")
+    parser.add_argument("--language_model", type=str, default="Qwen/Qwen3-0.6B", help="语言模型名称")
     parser.add_argument("--projector_type", type=str, default="mlp", help="连接器类型: mlp, linear, identity")
     
     # 数据集参数
@@ -41,6 +41,7 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=8, help="批量大小")
     parser.add_argument("--max_length", type=int, default=77, help="最大文本长度")
     parser.add_argument("--image_size", type=int, default=224, help="图像大小")
+    parser.add_argument("--max_samples", type=int, default=None, help="最大样本数，用于小规模测试")
     
     # 训练参数
     parser.add_argument("--lr", type=float, default=5e-5, help="学习率")
@@ -86,7 +87,8 @@ def main():
         max_length=args.max_length,
         image_size=args.image_size,
         image_token=model.image_token,
-        split="train"
+        split="train",
+        max_samples=args.max_samples
     )
     
     train_dataloader = DataLoader(
@@ -106,7 +108,8 @@ def main():
         max_length=args.max_length,
         image_size=args.image_size,
         image_token=model.image_token,
-        split="val"
+        split="val",
+        max_samples=args.max_samples // 5 if args.max_samples else None  # 验证集样本数量为训练集的1/5
     )
     
     val_dataloader = DataLoader(

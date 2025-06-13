@@ -20,7 +20,8 @@ class CocoDataset(Dataset):
         max_length=77,
         image_size=224,
         image_token="<image>",
-        split="train"
+        split="train",
+        max_samples=None
     ):
         self.data_dir = data_dir
         self.tokenizer = tokenizer
@@ -45,6 +46,11 @@ class CocoDataset(Dataset):
             self.annotations = [a for a in coco_data['annotations'] if a['image_id'] % 5 == 0]
         else:
             self.annotations = coco_data['annotations']
+            
+        # 限制样本数量（如果指定）
+        if max_samples is not None and max_samples > 0:
+            self.annotations = self.annotations[:max_samples]
+            print(f"使用限制的数据集大小: {len(self.annotations)} 样本")
     
     def __len__(self):
         return len(self.annotations)

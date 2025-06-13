@@ -8,7 +8,7 @@ class ModelConfig:
     def __init__(
         self,
         vision_model_name="openai/clip-vit-base-patch16",
-        language_model_name="Qwen/Qwen2-0.5B",
+        language_model_name="Qwen/Qwen3-0.6B",
         vision_select_layer=-1,
         projector_type="mlp",
         mm_use_im_start_end=False,

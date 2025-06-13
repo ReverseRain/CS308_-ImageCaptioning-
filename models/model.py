@@ -22,7 +22,7 @@ class ImageCaptioningModel(nn.Module):
             # 默认配置
             config = ModelConfig(
                 vision_model_name="openai/clip-vit-base-patch16",
-                language_model_name="Qwen/Qwen1.5-0.5B",  # 可以替换为 Qwen3-0.6B
+                language_model_name="Qwen/Qwen3-0.6B",  # 已替换为 Qwen3-0.6B
                 vision_select_layer=-1,
                 projector_type="mlp"
             )

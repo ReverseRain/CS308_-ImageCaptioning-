@@ -31,18 +31,20 @@ class CocoDataset(Dataset):
         
         # 加载注释
         with open(ann_file, 'r') as f:
-            self.annotations = json.load(f)
-        
-        # 根据分割选择数据
-        if split == "train":
-            self.annotations = [a for a in self.annotations['annotations'] if a['image_id'] % 5 != 0]
-        elif split == "val":
-            self.annotations = [a for a in self.annotations['annotations'] if a['image_id'] % 5 == 0]
+            coco_data = json.load(f)
         
         # 创建图像ID到文件名的映射
         self.id_to_filename = {}
-        for image in self.annotations['images']:
+        for image in coco_data['images']:
             self.id_to_filename[image['id']] = image['file_name']
+            
+        # 根据分割选择数据
+        if split == "train":
+            self.annotations = [a for a in coco_data['annotations'] if a['image_id'] % 5 != 0]
+        elif split == "val":
+            self.annotations = [a for a in coco_data['annotations'] if a['image_id'] % 5 == 0]
+        else:
+            self.annotations = coco_data['annotations']
     
     def __len__(self):
         return len(self.annotations)

@@ -1,177 +1,82 @@
+"""
+Main training script for image captioning model
+"""
+
 import os
-import argparse
 import torch
-import torch.nn as nn
-import torchvision.transforms as transforms
-from dataclasses import dataclass, field
-from typing import Optional
-import transformers
-from transformers import HfArgumentParser
+import argparse
 
-from ..model import ImageCaptioningModel
-from .trainer import ImageCapTrainer
-from ..data import create_coco_dataloaders
+from ImageCap.data.coco_dataset import COCOCaptionDataset, collate_fn
+from ImageCap.model.image_captioning_model import ImageCaptioningModel
+from ImageCap.train.trainer import ImageCaptioningTrainer
 
 
-@dataclass
-class ModelArguments:
-    """Arguments pertaining to which model/config we are going to fine-tune"""
-    vision_tower: str = field(
-        default="google/vit-base-patch16-224", 
-        metadata={"help": "Path to the vision encoder model"}
-    )
-    language_model_path: str = field(
-        default="Qwen/Qwen1.5-0.6B", 
-        metadata={"help": "Path to the language model"}
-    )
-    mm_projector_type: str = field(
-        default="mlp",
-        metadata={"help": "Type of multi-modal projector to use. Options: linear, mlp, mlp{n}x_gelu"}
-    )
-    mm_vision_select_layer: int = field(
-        default=-1,
-        metadata={"help": "Which layer of the vision encoder to use (-1 means last layer)"}
-    )
-    mm_vision_select_feature: str = field(
-        default="patch",
-        metadata={"help": "Which feature of the vision encoder to use: patch or cls"}
-    )
-
-
-@dataclass
-class DataArguments:
-    """Arguments pertaining to the data"""
-    train_annotation_file: str = field(
-        default=None,
-        metadata={"help": "Path to the training annotation file"}
-    )
-    val_annotation_file: str = field(
-        default=None,
-        metadata={"help": "Path to the validation annotation file"}
-    )
-    image_dir: str = field(
-        default=None,
-        metadata={"help": "Directory with the images"}
-    )
-    max_length: int = field(
-        default=77,
-        metadata={"help": "Maximum length of tokenized caption"}
-    )
-    image_size: int = field(
-        default=224,
-        metadata={"help": "Size of the images"}
-    )
-
-
-@dataclass
-class TrainingArguments:
-    """Arguments pertaining to training"""
-    output_dir: str = field(
-        default="./outputs",
-        metadata={"help": "Output directory"}
-    )
-    batch_size: int = field(
-        default=16,
-        metadata={"help": "Batch size for training"}
-    )
-    learning_rate: float = field(
-        default=2e-5,
-        metadata={"help": "Learning rate"}
-    )
-    weight_decay: float = field(
-        default=0.0,
-        metadata={"help": "Weight decay"}
-    )
-    epochs: int = field(
-        default=10,
-        metadata={"help": "Number of epochs"}
-    )
-    warmup_ratio: float = field(
-        default=0.1,
-        metadata={"help": "Ratio of steps for warmup"}
-    )
-    save_every: int = field(
-        default=1,
-        metadata={"help": "Save checkpoint every n epochs"}
-    )
-    train_mm_mlp_adapter: bool = field(
-        default=True,
-        metadata={"help": "Train the multi-modal MLP adapter"}
-    )
-    train_lm_head: bool = field(
-        default=True,
-        metadata={"help": "Train the language model's output layer"}
-    )
-    full_finetune: bool = field(
-        default=False,
-        metadata={"help": "Finetune the entire model"}
-    )
-    use_fp16: bool = field(
-        default=False,
-        metadata={"help": "Use mixed precision"}
-    )
-    save_language_model: bool = field(
-        default=False,
-        metadata={"help": "Save the language model separately"}
-    )
-    device: str = field(
-        default="cuda" if torch.cuda.is_available() else "cpu",
-        metadata={"help": "Device to use for training"}
-    )
-
-
-def train():
-    """Main training function"""
-    # Parse arguments
-    parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
-    model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+def parse_args():
+    parser = argparse.ArgumentParser(description="Train image captioning model")
     
-    # Set up device
-    device = torch.device(training_args.device)
+    parser.add_argument("--vision_encoder_path", type=str, default="ImageCap/models/vit-base-patch16-224",
+                        help="Path to vision encoder model")
+    parser.add_argument("--language_model_path", type=str, default="ImageCap/models/qwen3-0.6b",
+                        help="Path to language model")
+    parser.add_argument("--image_dir", type=str, default="ImageCap/data/coco/train2014",
+                        help="Directory containing training images")
+    parser.add_argument("--annotation_file", type=str, default="ImageCap/data/coco/annotations/captions_train2014.json",
+                        help="Path to annotation file")
+    parser.add_argument("--batch_size", type=int, default=8, help="Batch size for training")
+    parser.add_argument("--learning_rate", type=float, default=5e-5, help="Learning rate")
+    parser.add_argument("--num_epochs", type=int, default=10, help="Number of training epochs")
+    parser.add_argument("--save_dir", type=str, default="ImageCap/checkpoints", help="Directory to save model checkpoints")
+    parser.add_argument("--log_interval", type=int, default=10, help="Log interval")
+    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu",
+                        help="Device to train on (cuda or cpu)")
+    parser.add_argument("--max_samples", type=int, default=None, 
+                        help="Maximum number of samples to use for training (None for all)")
+    parser.add_argument("--use_multi_gpus", action="store_true", 
+                        help="Whether to use multiple GPUs for training if available")
     
-    # Create output directory
-    os.makedirs(training_args.output_dir, exist_ok=True)
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    
+    # Create dataset
+    print("Creating dataset...")
+    train_dataset = COCOCaptionDataset(
+        image_dir=args.image_dir,
+        annotation_file=args.annotation_file,
+        image_processor_path=args.vision_encoder_path,
+        max_samples=args.max_samples
+    )
     
     # Create model
     print("Creating model...")
-    model_config = argparse.Namespace(**vars(model_args), **vars(training_args))
-    model_config.language_model_path = model_args.language_model_path
-    
-    model = ImageCaptioningModel(model_config)
-    
-    # Create image transforms
-    transform = transforms.Compose([
-        transforms.Resize((data_args.image_size, data_args.image_size)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
-    
-    # Create dataloaders
-    print("Creating dataloaders...")
-    train_loader, val_loader = create_coco_dataloaders(
-        annotation_train_file=data_args.train_annotation_file,
-        annotation_val_file=data_args.val_annotation_file,
-        image_dir=data_args.image_dir,
-        tokenizer=model.tokenizer,
-        transform=transform,
-        batch_size=training_args.batch_size,
-        max_length=data_args.max_length
+    model = ImageCaptioningModel(
+        vision_encoder_path=args.vision_encoder_path,
+        language_model_path=args.language_model_path,
+        device=args.device
     )
     
     # Create trainer
     print("Creating trainer...")
-    trainer = ImageCapTrainer(model, model_config)
+    trainer = ImageCaptioningTrainer(
+        model=model,
+        train_dataset=train_dataset,
+        val_dataset=None,  # No validation dataset for now
+        batch_size=args.batch_size,
+        learning_rate=args.learning_rate,
+        num_epochs=args.num_epochs,
+        save_dir=args.save_dir,
+        collate_fn=collate_fn,
+        log_interval=args.log_interval,
+        device=args.device,
+        use_multi_gpus=args.use_multi_gpus
+    )
     
     # Train model
     print("Starting training...")
-    trainer.train(
-        train_dataloader=train_loader,
-        val_dataloader=val_loader,
-        epochs=training_args.epochs
-    )
-    
-    print("Training complete!")
+    trainer.train()
 
 
 if __name__ == "__main__":
-    train() 
+    main() 

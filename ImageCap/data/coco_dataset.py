@@ -1,166 +1,95 @@
+"""
+COCO dataset module for image captioning
+"""
+
 import os
 import json
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
-import random
-from transformers import AutoTokenizer
-
+from transformers import ViTImageProcessor
+from tqdm import tqdm  # 导入 tqdm 进度条库
 
 class COCOCaptionDataset(Dataset):
     """
-    Dataset for loading COCO captioning data
+    COCO dataset for image captioning
     """
-    def __init__(self, annotation_file, image_dir, tokenizer=None, transform=None, max_length=77, split='train'):
+    
+    def __init__(self, image_dir, annotation_file, image_processor_path, max_length=77, max_samples=None):
         """
         Args:
-            annotation_file (string): Path to the annotation json file
-            image_dir (string): Directory with all the images
-            tokenizer: Tokenizer for processing text
-            transform: Transform to apply to images
-            max_length (int): Maximum length of tokenized caption
-            split (string): 'train', 'val', or 'test'
+            image_dir: directory containing image files
+            annotation_file: COCO annotation file
+            image_processor_path: path to the ViT image processor
+            max_length: maximum length of captions
+            max_samples: maximum number of samples to use (None for all)
         """
         self.image_dir = image_dir
-        self.transform = transform
         self.max_length = max_length
-        self.split = split
         
         # Load annotations
         with open(annotation_file, 'r') as f:
             self.annotations = json.load(f)
         
         # Process annotations
-        if 'annotations' in self.annotations:
-            self.captions = self.annotations['annotations']
-        else:
-            self.captions = self.annotations['images']
+        self.data = []
+
+        image_id_to_file = {img['id']: img['file_name'] for img in self.annotations['images']}
         
-        # Create image_id to filename mapping
-        self.id_to_filename = {}
-        for img in self.annotations['images']:
-            self.id_to_filename[img['id']] = img['file_name']
-            
-        # Setup tokenizer
-        if tokenizer is None:
-            self.tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen1.5-0.5B")
-        else:
-            self.tokenizer = tokenizer
-            
-        # Special tokens for image captioning
-        self.image_start_token = "<image>"
-        self.image_end_token = "</image>"
-        self.add_caption_token = "<caption>"
+        annotations = self.annotations['annotations']
+        if max_samples is not None and max_samples < len(annotations):
+            annotations = annotations[:max_samples]
+            print(f"Using {max_samples} samples out of {len(self.annotations['annotations'])}")
         
-        # Add special tokens to tokenizer if they don't exist
-        special_tokens = []
-        for token in [self.image_start_token, self.image_end_token, self.add_caption_token]:
-            if token not in self.tokenizer.vocab:
-                special_tokens.append(token)
-                
-        if special_tokens:
-            self.tokenizer.add_special_tokens({'additional_special_tokens': special_tokens})
+        for ann in tqdm(annotations, desc="Processing images"):
+            image_id = ann['image_id']
+            caption = ann['caption']
+            image_filename = image_id_to_file.get(image_id)  # O(1)查询
+            
+            if image_filename:
+                self.data.append({
+                    'image_id': image_id,
+                    'image_file': os.path.join(self.image_dir, image_filename),
+                    'caption': caption
+                })
+        
+        # Image processor for ViT
+        self.image_processor = ViTImageProcessor.from_pretrained(image_processor_path)
     
     def __len__(self):
-        return len(self.captions)
+        return len(self.data)
     
     def __getitem__(self, idx):
-        """
-        Returns:
-            image: Processed image
-            input_ids: Tokenized caption
-            attention_mask: Attention mask for tokenized caption
-            labels: Labels for the caption (same as input_ids but with -100 for tokens we don't want to predict)
-        """
-        caption_info = self.captions[idx]
+        item = self.data[idx]
         
-        # Get image
-        if 'image_id' in caption_info:
-            image_id = caption_info['image_id']
-        else:
-            image_id = caption_info['id']
-            
-        image_filename = self.id_to_filename[image_id]
-        image_path = os.path.join(self.image_dir, image_filename)
-        image = Image.open(image_path).convert('RGB')
-        
-        # Apply transformation if provided
-        if self.transform is not None:
-            image = self.transform(image)
-            
-        # Get caption
-        if 'caption' in caption_info:
-            caption = caption_info['caption']
-        else:
-            # For files with multiple captions per image, select one randomly
-            caption = random.choice(caption_info['sentences'])['raw']
-            
-        # Format with special tokens
-        formatted_caption = f"{self.image_start_token} {self.add_caption_token} {caption} {self.image_end_token}"
-        
-        # Tokenize caption
-        tokenized = self.tokenizer(
-            formatted_caption,
-            max_length=self.max_length,
-            padding='max_length',
-            truncation=True,
-            return_tensors='pt'
-        )
-        
-        # Create labels (same as input_ids but with -100 for tokens we don't want to predict)
-        labels = tokenized.input_ids.clone()
-        
-        # Set up labels to only predict the caption part (after the image_start and add_caption tokens)
-        # Find the position of the add_caption_token
-        add_caption_token_id = self.tokenizer.convert_tokens_to_ids(self.add_caption_token)
-        add_caption_pos = (labels == add_caption_token_id).nonzero(as_tuple=True)[1][0]
-        
-        # Set labels before add_caption_token to -100 (don't predict these)
-        labels[0, :add_caption_pos+1] = -100
+        # Load and preprocess image
+        try:
+            image = Image.open(item['image_file']).convert('RGB')
+            image_inputs = self.image_processor(images=image, return_tensors="pt")
+            image_tensor = image_inputs.pixel_values.squeeze(0)  # Remove batch dim
+        except Exception as e:
+            # If image loading fails, return a simple error indicator
+            print(f"Error loading image {item['image_file']}: {e}")
+            # Return zeros with proper shape (3 channels x height x width)
+            image_tensor = torch.zeros((3, 224, 224))
         
         return {
-            'image': image,
-            'input_ids': tokenized.input_ids.squeeze(0),
-            'attention_mask': tokenized.attention_mask.squeeze(0),
-            'labels': labels.squeeze(0)
+            'image': image_tensor,
+            'caption': item['caption'],
+            'image_id': item['image_id']
         }
 
 
-def create_coco_dataloaders(annotation_train_file, annotation_val_file, image_dir, 
-                          tokenizer, transform, batch_size=16, max_length=77):
+def collate_fn(batch):
     """
-    Create dataloaders for training and validation
+    Collate function for DataLoader
     """
-    train_dataset = COCOCaptionDataset(
-        annotation_file=annotation_train_file,
-        image_dir=image_dir,
-        tokenizer=tokenizer,
-        transform=transform,
-        max_length=max_length,
-        split='train'
-    )
+    images = torch.stack([item['image'] for item in batch])
+    captions = [item['caption'] for item in batch]
+    image_ids = [item['image_id'] for item in batch]
     
-    val_dataset = COCOCaptionDataset(
-        annotation_file=annotation_val_file,
-        image_dir=image_dir,
-        tokenizer=tokenizer,
-        transform=transform,
-        max_length=max_length,
-        split='val'
-    )
-    
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=4
-    )
-    
-    val_loader = torch.utils.data.DataLoader(
-        val_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=4
-    )
-    
-    return train_loader, val_loader 
+    return {
+        'images': images,
+        'captions': captions,
+        'image_ids': image_ids
+    } 

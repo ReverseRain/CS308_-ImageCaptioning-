@@ -1,0 +1,24 @@
+{
+  "model_checkpoint": "ImageCap/checkpoints/best_model.pt",
+  "dataset_split": "val",
+  "number_of_images": 10,
+  "scores": {
+    "Bleu_1": 0.24313725490100732,
+    "Bleu_2": 0.11787093544575777,
+    "Bleu_3": 0.03895667354792515,
+    "Bleu_4": 4.026157591461525e-06,
+    "CIDEr": 0.0029031150515937136
+  },
+  "predictions": {
+    "391895": "of of a a in in a car in car car. in. a. . a.a. l.  l.l. and and. d",
+    "522418": "man man a a in a kitchen kitchen a with a and with with and and a. with. and. a the a to the. to a",
+    "184613": "women women people people in in a a in with people with with a people. people a. a with. with in. in people and. the",
+    "318219": "man in a house with a dog a cat on a door..  man with dog and cat. man and dog. dog on bed with cat",
+    "554625": "woman in a man in the woman a woman and a in. a a with a phone. with phone phone with with. phone a person. person",
+    "397133": "kitchen kitchen with a a and a on a in a kitchen. kitchen is kitchen a is a. a of a the a to the. the to",
+    "574769": "man man in a a man a with with a and a on a kitchen kitchen with kitchen. with. kitchen a. a the. the the a",
+    "60623": "a a with a and and a in and in with and with. with with in in. and. a. in a  with the with of",
+    "309022": "man in in a a in an a. a and a man. and. man man and man an and an. an man a an an the",
+    "5802": "a a with with a and a white white and and white. white is white a is a in a the the a of the of a to the"
+  }
+}

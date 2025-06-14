@@ -68,40 +68,54 @@ class ImageCaptioningModel(nn.Module):
         
         if captions is None:
             # Generation mode (inference)
+            # 确保使用与训练相同的输入格式
+            # 准备提示词前缀
             prompt = self.image_token + " Caption: "
             prompt_ids = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False).input_ids.to(self.device)
             
-            # Create input embeddings - similar to training mode
-            # Get the language model embeddings for the prompt
-            prompt_embeds = self.language_model.get_input_embeddings()(prompt_ids.squeeze(0))
+            # 获取提示词的嵌入
+            prompt_embeds = self.language_model.get_input_embeddings()(prompt_ids[0])
             
-            # Concatenate with the projected vision features for batch[0]
-            full_embeds = torch.cat([
-                prompt_embeds[:1],  # [IMAGE] token embedding
-                projected_features[0],  # Vision features for first image
-                prompt_embeds[1:],  # Caption: token embeddings
-            ], dim=0)
+            # 构建输入嵌入，模拟训练时的格式
+            input_embeds = []
             
-            # Create attention mask
-            attention_mask = torch.ones(full_embeds.size(0), dtype=torch.bool, device=self.device)
+            # 对每个批次样本构建嵌入
+            for b in range(batch_size):
+                # 拼接：[IMAGE]标记嵌入 + 视觉特征 + "Caption: "的嵌入
+                full_embeds = torch.cat([
+                    prompt_embeds[:1],  # [IMAGE]标记嵌入
+                    projected_features[b],  # 图像视觉特征
+                    prompt_embeds[1:],  # "Caption: "的嵌入
+                ], dim=0)
+                
+                input_embeds.append(full_embeds)
             
-            # Forward pass through language model with inputs_embeds and improved generation parameters
-            # 修改生成参数，使用组束搜索
-            outputs = self.language_model.generate(
-                inputs_embeds=full_embeds.unsqueeze(0),
-                attention_mask=attention_mask.unsqueeze(0),
-                max_new_tokens=50,
-                num_beams=6,  # 修改为6，确保能被num_beam_groups=2整除
-                no_repeat_ngram_size=3,
-                length_penalty=1.0,
-                diversity_penalty=1.5,
-                num_beam_groups=2,
-                do_sample=False,
-                early_stopping=True,
-                use_cache=True
-                )
+            # 转换为批次张量
+            input_embeds = torch.stack(input_embeds)
             
-            return outputs
+            # 创建注意力掩码
+            attention_mask = torch.ones(
+                (batch_size, input_embeds.shape[1]), 
+                dtype=torch.long, 
+                device=self.device
+            )
+            
+            # 使用transformers的generate方法生成
+            gen_tokens = self.language_model.generate(
+                inputs_embeds=input_embeds,
+                attention_mask=attention_mask,
+                max_new_tokens=30,
+                num_beams=3,
+                repetition_penalty=1.5,
+                no_repeat_ngram_size=2,
+                temperature=0.9,
+                do_sample=True,
+                top_p=0.9,
+                early_stopping=True
+            )
+            
+            # 返回生成的token
+            return gen_tokens
         
         # Training mode
         # Prepare inputs: [IMAGE] Caption: {caption}

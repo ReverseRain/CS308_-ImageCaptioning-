@@ -1,2 +1,5 @@
 /ImageCap/data/coco
 /LLaVA2
+/coco2014/train2014
+/coco2014/val2014
+/coco2014/annotations

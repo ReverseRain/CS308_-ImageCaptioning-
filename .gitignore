@@ -4,3 +4,4 @@
 /coco2014/val2014
 /coco2014/annotations
 /coco2014
+*.pyc

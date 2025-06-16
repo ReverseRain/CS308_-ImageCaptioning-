@@ -1,21 +1,24 @@
 import torch
 import torch.nn as nn
 from torchvision import models
+from torchvision.models import ViT_B_16_Weights, vit_b_16
 
 
 class CNNEncoder(nn.Module):
     def __init__(self, embed_size):
         super().__init__()
-        resnet = models.resnet18(pretrained=True)
-        modules = list(resnet.children())[:-1]
-        self.resnet = nn.Sequential(*modules)
-        self.linear = nn.Linear(resnet.fc.in_features, embed_size)
+        # 使用预训练的Vision Transformer模型
+        self.vit = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
+        # 移除分类头
+        self.feature_dim = self.vit.heads.head.in_features
+        self.vit.heads = nn.Identity()
+        # 特征映射层
+        self.linear = nn.Linear(self.feature_dim, embed_size)
         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
 
     def forward(self, images):
         with torch.no_grad():
-            features = self.resnet(images)
-            features = features.view(features.size(0), -1)  # 保证是[batch, features]
+            features = self.vit(images)  # [batch, feature_dim]
         features = self.linear(features)
         features = self.bn(features)
         return features

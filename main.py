@@ -50,7 +50,7 @@ if __name__ == "__main__":
         'val_img_dir': 'coco2014/val2014',
         'val_ann_file': 'coco2014/annotations/captions_val2014.json',
         'batch_size': 32,
-        'epochs': 20,
+        'epochs': 1,
         'embed_size': 256,
         'hidden_size': 512,
         'lr': 1e-3

@@ -3,9 +3,9 @@ import torch
 
 
 class Tokenizer:
-    def __init__(self, pretrained_model_name='Qwen/Qwen3-0.6B', max_len=20):
+    def __init__(self, captions=None, max_len=20):
         print(f"Loading tokenizer...")
-        self.tokenizer = AutoTokenizer.from_pretrained('./pretrained_models/Qwen3-0.6B')
+        self.tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
 
         self.max_len = max_len
         self.pad_token_id = self.tokenizer.pad_token_id

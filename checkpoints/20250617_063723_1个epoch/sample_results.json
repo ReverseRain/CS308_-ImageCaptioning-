@@ -1,0 +1,162 @@
+[
+  {
+    "gt": "A bicycle replica with a clock as the front wheel.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA black and white photograph of a person with a stop sign on a street corner."
+  },
+  {
+    "gt": "A black Honda motorcycle parked in front of a garage.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA motorcycle is parked in the middle of a street."
+  },
+  {
+    "gt": "A room with blue walls and a white sink and door.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a sink and a toilet."
+  },
+  {
+    "gt": "A car that seems to be parked illegally behind a legally parked car",
+    "pred": "assistant\n<think>\n\n</think>\n\nA person is walking down a street with a bike"
+  },
+  {
+    "gt": "A large passenger airplane flying through the air.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA plane that is on the tarmac is flying over a runway."
+  },
+  {
+    "gt": "There is a GOL plane taking off in a partly cloudy sky.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA plane with an airplane."
+  },
+  {
+    "gt": "Blue and white color scheme in a small bathroom.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a toilet and mirror."
+  },
+  {
+    "gt": "This is a blue and white bathroom with a wall sink and a lifesaver on the wall.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a toilet sitting in the bathroom mirror."
+  },
+  {
+    "gt": "A blue boat themed bathroom with a life preserver on the wall",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a sink and a toilet and a toilet seat."
+  },
+  {
+    "gt": "The bike has a clock as a tire.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA group of horses pulling the road"
+  },
+  {
+    "gt": "A Honda motorcycle parked in a grass driveway",
+    "pred": "assistant\n<think>\n\n</think>\n\nA motorcycle parked in front of a building."
+  },
+  {
+    "gt": "two cars parked on the sidewalk on the street",
+    "pred": "assistant\n<think>\n\n</think>\n\nA red fire hydrant is sitting next to a lot of  flavored green trucks."
+  },
+  {
+    "gt": "An airplane that is, either, landing or just taking off.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA white airplane sitting on the runway at an airport."
+  },
+  {
+    "gt": "A bathroom with walls that are painted baby blue.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a toilet and a mirror."
+  },
+  {
+    "gt": "A bathroom with a toilet, sink, and shower.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA small bathroom with a toilet sitting next to a mirror."
+  },
+  {
+    "gt": "A long empty, minimal modern skylit home kitchen.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA kitchen with a large dining table in the kitchen."
+  },
+  {
+    "gt": "An office cubicle with four different types of computers.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA desk with a computer and a mouse."
+  },
+  {
+    "gt": "A bathroom sink with toiletries on the counter.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a sink, mirror, and sink tub."
+  },
+  {
+    "gt": "A small closed toilet in a cramped space.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a toilet and a toilet seat"
+  },
+  {
+    "gt": "Two women waiting at a bench next to a street.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA girl sitting on a bench with a bike in the park."
+  },
+  {
+    "gt": "A bathroom sink and various personal hygiene items.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA kitchen sink with a white sink is shown"
+  },
+  {
+    "gt": "This is an open box containing four cucumbers.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA woman is taking a picture of a kid."
+  },
+  {
+    "gt": "An old-fashioned green station wagon is parked on a shady driveway.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA person is walking on a train track"
+  },
+  {
+    "gt": "A gas stove next to a stainless steel kitchen sink and countertop.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA kitchen with a lot of counters and a sink."
+  },
+  {
+    "gt": "A black metal bicycle with a clock inside the front wheel.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA woman is holding a bicycle."
+  },
+  {
+    "gt": "A black Honda motorcycle with a dark burgundy seat.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bird that is sitting on a wooden table."
+  },
+  {
+    "gt": "A tan toilet and sink combination in a small room.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA toilet bowl sitting in the bathroom."
+  },
+  {
+    "gt": "Several motorcycles riding down the road in formation.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA man is riding a motorcycle on a street."
+  },
+  {
+    "gt": "A black cat is inside a white toilet.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a toilet, toilet paper and a toilet paper dispenser."
+  },
+  {
+    "gt": "City street with parked cars and a bench.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA close up of a dog with a yellow shirt sitting on a leash on a yellow field."
+  },
+  {
+    "gt": "The home office space seems to be very cluttered.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA small desk with a computer desk, two computer monitors and a keyboard."
+  },
+  {
+    "gt": "A man in a wheelchair and another sitting on a bench that is overlooking the water.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA man on a skateboard is riding through the water."
+  },
+  {
+    "gt": "A man sits with a traditionally decorated cow",
+    "pred": "assistant\n<think>\n\n</think>\n\nA woman holding a dog on a street."
+  },
+  {
+    "gt": "Rows of motor bikes and helmets in a city",
+    "pred": "assistant\n<think>\n\n</think>\n\nA dog on a motorcycle riding down a road"
+  },
+  {
+    "gt": "A cute kitten is sitting in a dish on a table.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA cat is laying on a cat view."
+  },
+  {
+    "gt": "A messy bathroom countertop perched atop black cabinetry.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA bathroom with a white sink, a mirror, a sink mirror, a sink mirror, and a toilet."
+  },
+  {
+    "gt": "A man getting a drink from a water fountain that is a toilet.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA white toilet in a bathroom with a toilet paper dispenser."
+  },
+  {
+    "gt": "An open food container box with four unknown food items.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA sandwich that has been pickleed on top of a variety of donuts."
+  },
+  {
+    "gt": "An old teal colored car parked on the street.",
+    "pred": "assistant\n<think>\n\n</think>\n\nA herd of cattle with a gray background."
+  },
+  {
+    "gt": "A beautiful dessert waiting to be shared by two people",
+    "pred": "assistant\n<think>\n\n</think>\n\nA blue glass vase with a pink flower on it."
+  }
+]

@@ -5,3 +5,4 @@
 /coco2014/annotations
 /coco2014
 *.pyc
+*.pth

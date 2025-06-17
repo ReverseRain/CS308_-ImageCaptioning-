@@ -1,0 +1,402 @@
+[
+  {
+    "gt": "A bicycle replica with a clock as the front wheel.",
+    "pred": "A clock is displayed in a metal frame."
+  },
+  {
+    "gt": "A black Honda motorcycle parked in front of a garage.",
+    "pred": "A motorcycle parked on the side of a street."
+  },
+  {
+    "gt": "A room with blue walls and a white sink and door.",
+    "pred": "A bathroom with a toilet, sink, and mirror."
+  },
+  {
+    "gt": "A car that seems to be parked illegally behind a legally parked car",
+    "pred": "A man and a woman on a street next to a car."
+  },
+  {
+    "gt": "A large passenger airplane flying through the air.",
+    "pred": "A large white jetliner flying in the air over a runway."
+  },
+  {
+    "gt": "There is a GOL plane taking off in a partly cloudy sky.",
+    "pred": "A large jetliner flying through the air."
+  },
+  {
+    "gt": "Blue and white color scheme in a small bathroom.",
+    "pred": "A bathroom with a sink, toilet, and mirror."
+  },
+  {
+    "gt": "This is a blue and white bathroom with a wall sink and a lifesaver on the wall.",
+    "pred": "A bathroom with a toilet, sink, and mirror."
+  },
+  {
+    "gt": "A blue boat themed bathroom with a life preserver on the wall",
+    "pred": "A bathroom with a white toilet and a towel rack."
+  },
+  {
+    "gt": "The bike has a clock as a tire.",
+    "pred": "A clock is on a tower."
+  },
+  {
+    "gt": "A Honda motorcycle parked in a grass driveway",
+    "pred": "A motorcycle is parked in a parking lot."
+  },
+  {
+    "gt": "two cars parked on the sidewalk on the street",
+    "pred": "A vintage image of a street scene with cars and trucks."
+  },
+  {
+    "gt": "An airplane that is, either, landing or just taking off.",
+    "pred": "A large jetliner flying through the air."
+  },
+  {
+    "gt": "A bathroom with walls that are painted baby blue.",
+    "pred": "A white bathroom with a green toilet and a white sink."
+  },
+  {
+    "gt": "A bathroom with a toilet, sink, and shower.",
+    "pred": "A bathroom with a toilet and a sink."
+  },
+  {
+    "gt": "A long empty, minimal modern skylit home kitchen.",
+    "pred": "A kitchen with a stove, oven, and microwave."
+  },
+  {
+    "gt": "An office cubicle with four different types of computers.",
+    "pred": "A desk with two computers and a monitor on it."
+  },
+  {
+    "gt": "A bathroom sink with toiletries on the counter.",
+    "pred": "A bathroom with a sink, mirror, and mirror sink."
+  },
+  {
+    "gt": "A small closed toilet in a cramped space.",
+    "pred": "A toilet that has a toilet seat in the middle of a bathroom."
+  },
+  {
+    "gt": "Two women waiting at a bench next to a street.",
+    "pred": "a man and a woman are sitting on a bench"
+  },
+  {
+    "gt": "A bathroom sink and various personal hygiene items.",
+    "pred": "A bathroom with a sink, mirror, and bathtub."
+  },
+  {
+    "gt": "This is an open box containing four cucumbers.",
+    "pred": "A pair of scissors in a hand on a counter top."
+  },
+  {
+    "gt": "An old-fashioned green station wagon is parked on a shady driveway.",
+    "pred": "A small black and white dog sitting on a chair next to a white car."
+  },
+  {
+    "gt": "A gas stove next to a stainless steel kitchen sink and countertop.",
+    "pred": "A kitchen with a stove, oven, and cupboards."
+  },
+  {
+    "gt": "A black metal bicycle with a clock inside the front wheel.",
+    "pred": "A clock is mounted on a wall above a bicycle."
+  },
+  {
+    "gt": "A black Honda motorcycle with a dark burgundy seat.",
+    "pred": "A motorcycle parked in a parking lot."
+  },
+  {
+    "gt": "A tan toilet and sink combination in a small room.",
+    "pred": "A toilet with a tub and a sink in a white and tan tiled bathroom."
+  },
+  {
+    "gt": "Several motorcycles riding down the road in formation.",
+    "pred": "A man riding a motorcycle down a street."
+  },
+  {
+    "gt": "A black cat is inside a white toilet.",
+    "pred": "A white toilet with a black seat on the seat."
+  },
+  {
+    "gt": "City street with parked cars and a bench.",
+    "pred": "A small town with a fence, a bike and a van."
+  },
+  {
+    "gt": "The home office space seems to be very cluttered.",
+    "pred": "A desk with a computer monitor, printer and printer key."
+  },
+  {
+    "gt": "A man in a wheelchair and another sitting on a bench that is overlooking the water.",
+    "pred": "A man on a skateboard and a dog on a leash."
+  },
+  {
+    "gt": "A man sits with a traditionally decorated cow",
+    "pred": "A man in a leather jacket and red hat on a street."
+  },
+  {
+    "gt": "Rows of motor bikes and helmets in a city",
+    "pred": "A group of people on motorcycles parked on a street."
+  },
+  {
+    "gt": "A cute kitten is sitting in a dish on a table.",
+    "pred": "A cat is sitting on a white counter top."
+  },
+  {
+    "gt": "A messy bathroom countertop perched atop black cabinetry.",
+    "pred": "A bathroom with sink, mirror, mirror and bathtub."
+  },
+  {
+    "gt": "A man getting a drink from a water fountain that is a toilet.",
+    "pred": "A toilet sitting on a counter top with a toilet paper roll and a control panel."
+  },
+  {
+    "gt": "An open food container box with four unknown food items.",
+    "pred": "A person in a white shirt is cutting into a piece of pizza."
+  },
+  {
+    "gt": "An old teal colored car parked on the street.",
+    "pred": "A red and yellow car is on the road."
+  },
+  {
+    "gt": "A beautiful dessert waiting to be shared by two people",
+    "pred": "A white plate topped with a piece of cake next to a plate of berries."
+  },
+  {
+    "gt": "A woman sitting on a bench and a woman standing waiting for the bus.",
+    "pred": "A man and woman with a wedding dress walking down the sidewalk."
+  },
+  {
+    "gt": "A person holding a skateboard overlooks a dead field of crops.",
+    "pred": "A woman in a pink shirt and black shorts is walking with her hand on her arm."
+  },
+  {
+    "gt": "A group of motorcycle riders driving past buildings.",
+    "pred": "A man riding a motorcycle on a city street."
+  },
+  {
+    "gt": "A bathroom with a sink and shower curtain with a map print.",
+    "pred": "A toilet with a small sink and a mirror."
+  },
+  {
+    "gt": "A random plane in the sky flying alone",
+    "pred": "A large commercial jet flying through the air with the ground below."
+  },
+  {
+    "gt": "An airplane flying high in the blue sky. ",
+    "pred": "A small plane flying over a field with lots of trees."
+  },
+  {
+    "gt": "A woman sitting on a bench in the middle of the city",
+    "pred": "A man walking across a street with a suitcase."
+  },
+  {
+    "gt": "A brown and black horse in the middle of the city eating grass.",
+    "pred": "A cow on a beach next to a cow and a cow and a bull eating on the grass."
+  },
+  {
+    "gt": "A brown purse is sitting on a green bench.",
+    "pred": "A girl is sitting on a bench looking at a red bench."
+  },
+  {
+    "gt": "This is an advanced toilet with a sink and control panel.",
+    "pred": "A bathroom with a toilet and a sink."
+  },
+  {
+    "gt": "Half of a white cake with coconuts on top.",
+    "pred": "A person with a plate of food on a table."
+  },
+  {
+    "gt": "An old toilet with a hello kitty cover top. ",
+    "pred": "A toilet with a blue lid and a white tank"
+  },
+  {
+    "gt": "Office space with office equipment on desk top.",
+    "pred": "A laptop computer on a desk with a monitor."
+  },
+  {
+    "gt": "Two husky's hanging out of the car windows.",
+    "pred": "A small dog stands on the sidewalk next to a car."
+  },
+  {
+    "gt": "The back door with a window in the kitchen.",
+    "pred": "A bathroom with a sink and mirror."
+  },
+  {
+    "gt": "Jet liner flying off into the distance on an overcast day",
+    "pred": "A plane flying over a blue sky in the sky."
+  },
+  {
+    "gt": "A cat eating a bird it has caught.",
+    "pred": "A cat sits on a chair next to a window."
+  },
+  {
+    "gt": "A woman is walking a dog in the city.",
+    "pred": "A man is standing outside a home."
+  },
+  {
+    "gt": "Cars try to maneuver into parking spaces along a densely packed city street. ",
+    "pred": "A man is sitting on a bench in front of a car"
+  },
+  {
+    "gt": "Dogs stick their heads out of car windows",
+    "pred": "A cat sits on a window sill looking out."
+  },
+  {
+    "gt": "A person sits on a patch of grass observing the scenery.",
+    "pred": "A woman standing in a woman's field of people."
+  },
+  {
+    "gt": "A tiny bathroom with only a toilet and a shelf.",
+    "pred": "A bathroom with a toilet and a sink."
+  },
+  {
+    "gt": "A little girl in a public bathroom for kids.",
+    "pred": "A woman in a dress and dress shirt standing in a bathroom."
+  },
+  {
+    "gt": "A close-up picture of a toilet with a fountain.",
+    "pred": "A white toilet with a toilet in it."
+  },
+  {
+    "gt": "A boy drinking water from a toilet water fountain.",
+    "pred": "A toilet with a toilet seat and bowl."
+  },
+  {
+    "gt": "A picture of a man playing a violin in a kitchen.",
+    "pred": "A man in a kitchen with a pot, a woman preparing food and a dog."
+  },
+  {
+    "gt": "A shot of an elderly man inside a kitchen.",
+    "pred": "A man with a hat is standing on a boat."
+  },
+  {
+    "gt": "A small and crowded bathroom with little furnishing ",
+    "pred": "A bathroom with a toilet and sink."
+  },
+  {
+    "gt": "A trio of dogs sitting in their owner's lap in a red convertible.",
+    "pred": "A dog in a car seat in a car."
+  },
+  {
+    "gt": "A cat in between two cars in a parking lot.",
+    "pred": "A cat is laying on a window sill with a stuffed toy on top."
+  },
+  {
+    "gt": "A small car is parked in front of a scooter",
+    "pred": "A green car is driving down a city street."
+  },
+  {
+    "gt": "A woman sitting on a bench and a woman standing behind the bench at a bus stop",
+    "pred": "A man riding a skateboard down a city street."
+  },
+  {
+    "gt": "A woman and her dog walking down a sidewalk next to a fence with some flowers. ",
+    "pred": "A sign is on the side of a building with a fire hydrant."
+  },
+  {
+    "gt": "A door with a sticker of a cat door on it",
+    "pred": "A blue and white fire hydrant sitting on the ground."
+  },
+  {
+    "gt": "An office cubicle with multiple computers in it",
+    "pred": "A computer desk with a computer monitor and speakers."
+  },
+  {
+    "gt": "A pinewood and green modern themed kitchen area.",
+    "pred": "A kitchen with a sink, stove, and table."
+  },
+  {
+    "gt": "A man is playing violin in his kitchen",
+    "pred": "A man in a white shirt standing in a kitchen with a bowl of food."
+  },
+  {
+    "gt": "An old man is wearing an odd hat",
+    "pred": "A man is standing on a kitchen counter holding a knife."
+  },
+  {
+    "gt": "A kitchen is shown with wooden cabinets and a wooden celling.",
+    "pred": "A kitchen with a large oven and counter top."
+  },
+  {
+    "gt": "A group of people riding mopeds in a busy street. ",
+    "pred": "A group of people riding bikes down a street."
+  },
+  {
+    "gt": "A person walking in the rain on the sidewalk. ",
+    "pred": "A man holding a skateboard on the sidewalk near a building."
+  },
+  {
+    "gt": "A recently remodeled kitchen with marble and wooden furnishings.",
+    "pred": "A kitchen with a large oven and dishwasher."
+  },
+  {
+    "gt": "A parade of motorcycles is going through a group of tall trees.",
+    "pred": "A man on a motorcycle with a large back pack."
+  },
+  {
+    "gt": "a modern flush toilet in a bathroom with tile. ",
+    "pred": "A toilet sitting in a bathroom with a tub."
+  },
+  {
+    "gt": "A small box filled with four green vegetables. ",
+    "pred": "A bed with a blue sheet and a white headboard."
+  },
+  {
+    "gt": "A classic car sitting beside the road with a surfboard on top. ",
+    "pred": "A small train car is on the tracks with other cars in the background."
+  },
+  {
+    "gt": "Fog is in the air at an intersection with several traffic lights.",
+    "pred": "A traffic light and a traffic signal on a street."
+  },
+  {
+    "gt": "Three little dogs looking out a car window while sitting on a woman's lap. ",
+    "pred": "A dog sitting in a car seat with a bottle in its mouth."
+  },
+  {
+    "gt": "A young man drinking from a water fountain in the shape of a toilet.",
+    "pred": "A toilet with a toilet seat in the middle of a bathroom."
+  },
+  {
+    "gt": "An airplane with its landing wheels out landing. ",
+    "pred": "A blue and white airplane sitting on top of a runway."
+  },
+  {
+    "gt": "Little birds sitting on the shoulder of a giraffe. ",
+    "pred": "A giraffe stands on a grassy plain."
+  },
+  {
+    "gt": "A woman walking her dog on the sidewalk.",
+    "pred": "A fire hydrant sitting on the side of a road."
+  },
+  {
+    "gt": "a man with a bike at a marina",
+    "pred": "A man is riding a bike on a road."
+  },
+  {
+    "gt": "The top of a giraffe's head has birds on it.",
+    "pred": "A giraffe is standing in a field with other animals."
+  },
+  {
+    "gt": "A plane that is taking off at an airport",
+    "pred": "A large jetliner on a run way with the landing gear deployed."
+  },
+  {
+    "gt": "A man is sitting on a bench next to a bike.",
+    "pred": "A man and a woman sitting on a bench outside."
+  },
+  {
+    "gt": "People are waiting for the bus near a bus stop.",
+    "pred": "A group of people walking down a city street."
+  },
+  {
+    "gt": "The kitchen has a white door with a window.",
+    "pred": "A bathroom with a double sink and a tub."
+  },
+  {
+    "gt": "a man sleeping with his cat next to him",
+    "pred": "A cat laying on a bed in a cat bed."
+  },
+  {
+    "gt": "A kitchen and dining room area with a large window.",
+    "pred": "A room with a white refrigerator and a sink."
+  }
+]

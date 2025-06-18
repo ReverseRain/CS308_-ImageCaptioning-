@@ -21,11 +21,11 @@ config = {
 
 # 加载已训练模型的路径
 # 替换为您的模型保存路径，例如：20250617_063723
-checkpoint_dir = 'checkpoints/20250617_080202'
+checkpoint_dir = 'checkpoints/20250618_045553'
 model_path = os.path.join(checkpoint_dir, 'vlm_model_final.pth')
 
 # 设置设备
-device = torch.device('cuda:5' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:3' if torch.cuda.is_available() else 'cpu')
 print(f"使用设备: {device}")
 
 # 图像预处理
@@ -152,7 +152,7 @@ def generate_caption(model, image, tokenizer, max_length=50, device='cpu', tempe
         return clean_response.strip()
 
 # 设置最大评估样本数
-max_eval_samples = 100 
+max_eval_samples = 2400
 
 # 进行评估
 results = []
@@ -175,10 +175,10 @@ for i, (images, captions) in enumerate(tqdm(val_loader)):
         sample_count += 1
         
         # 打印部分结果
-        if len(results) % 1 == 0:
-            print('gt:', gt)
-            print('pred:', pred)
-            print('---')
+        # if len(results) % 1 == 0:
+        #     print('gt:', gt)
+        #     print('pred:', pred)
+        #     print('---')
         
         # 达到最大样本数后停止
         if sample_count >= max_eval_samples:

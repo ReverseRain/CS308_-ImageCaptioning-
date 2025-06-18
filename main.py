@@ -11,10 +11,11 @@ import os
 import time
 
 
-def train(model, dataloader, criterion, optimizer, tokenizer, device):
+def train(model, dataloader, criterion, optimizer, tokenizer, device, accumulation_steps=4):
     model.train()
     total_loss = 0
-    for images, captions in tqdm(dataloader):
+    optimizer.zero_grad()  # 初始化梯度
+    for i, (images, captions) in enumerate(tqdm(dataloader)):
         images = images.to(device)
         
         # 为每个caption创建输入和目标，使用带指令的格式
@@ -35,13 +36,21 @@ def train(model, dataloader, criterion, optimizer, tokenizer, device):
         
         # 计算损失（只考虑非填充token）
         loss = criterion(logits_flat, target_ids_flat)
-        
-        # 反向传播和优化
-        optimizer.zero_grad()
+        # 缩放损失值
+        loss = loss / accumulation_steps
         loss.backward()
+
+        # 每accumulation_steps步更新一次参数
+        if (i + 1) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad()
+
+        total_loss += loss.item() * accumulation_steps    
+    # 处理最后不足accumulation_steps的部分    
+    if (i + 1) % accumulation_steps != 0:
         optimizer.step()
-        
-        total_loss += loss.item()
+        optimizer.zero_grad()
+
     
     return total_loss / len(dataloader)
 
@@ -171,7 +180,6 @@ def generate_caption(model, image, tokenizer, max_length=50, device='cpu', tempe
         # 清理生成的文本，移除不必要的标记等
         return clean_response.strip()
 
-
 if __name__ == "__main__":
     config = {
         'train_img_dir': 'coco2014/train2014',
@@ -194,7 +202,7 @@ if __name__ == "__main__":
     print(f"Checkpoints directory: {ckpt_dir}")
     
     # 设置设备
-    device = torch.device('cuda:5' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:6' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
     
     # 图像预处理
@@ -245,15 +253,22 @@ if __name__ == "__main__":
         {'params': model.connector.parameters()},
         {'params': model.to_vocab.parameters()},
         {'params': model.visual_projection.parameters()},
+        # 添加顶层transformer层参数，使用较小学习率
+        {'params': model.language_model.model.layers[-2:].parameters(), 'lr': config['lr']/10},  
     ], lr=config['lr'], weight_decay=0.01)
     
     print(f"Starting training...")
     
+    # 添加学习率调度器
+    from torch.optim.lr_scheduler import CosineAnnealingLR
+    scheduler = CosineAnnealingLR(optimizer, T_max=config['epochs'], eta_min=1e-6)
+
     # 训练
     history = []
     for epoch in range(config['epochs']):
         train_loss = train(model, train_loader, criterion, optimizer, tokenizer, device)
         val_loss = validate(model, val_loader, criterion, tokenizer, device)
+        scheduler.step()  # 更新学习率
         print(f"Epoch {epoch + 1}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
         history.append({'epoch': epoch + 1, 'train_loss': train_loss, 'val_loss': val_loss})
         

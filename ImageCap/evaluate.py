@@ -138,6 +138,8 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
         #     outputs = model(image_inputs.pixel_values)
         
         # Process generated captions
+        prompt = "caption"
+        input_ids = model.tokenizer(prompt, return_tensors='pt').input_ids.to(model.device)
         for j, img_id in enumerate(batch_image_ids):
             # Determine the offset for decoding (196 patches + prompt length)
             # prompt = model.image_token + " Caption: "
@@ -160,19 +162,28 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
             # print("type",type(image_tensor),"   jusa ",type(batch_images[j]))
 
             vis_features = model.vision_encoder(image_tensor)
-            # vis_features = vis_features[:, 0, :] 
+            vis_features = vis_features[:, 0, :].unsqueeze(0)
+            # print(vis_features.shape)
 
             mapped_vis = model.projector(vis_features)
 
-            input_embeds = mapped_vis
+            text_outputs = model.language_model(input_ids=input_ids, output_hidden_states=True)
+            text_features = text_outputs.hidden_states[-1]
+
+            text_embeds = model.language_model.get_input_embeddings()(input_ids)
+            inputs_embeds = torch.cat([mapped_vis, text_embeds], dim=1)
+
+            # input_embeds = mapped_vis
+            # print(input_embeds.shape)
+            # break
 
 
             caption_tokens = model.language_model.generate(
-                inputs_embeds=input_embeds,
+                inputs_embeds=inputs_embeds,
                 max_length=50,
                 pad_token_id=model.tokenizer.pad_token_id,
                 eos_token_id=model.tokenizer.eos_token_id,
-                attention_mask=torch.ones(input_embeds.shape[:-1], dtype=torch.long, device=input_embeds.device)
+                attention_mask=torch.ones(inputs_embeds.shape[:-1], dtype=torch.long, device=inputs_embeds.device)
             )
             
             caption = model.tokenizer.decode(caption_tokens[0], skip_special_tokens=True)

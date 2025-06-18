@@ -22,7 +22,7 @@ def parse_args():
                         help="Directory containing training images")
     parser.add_argument("--annotation_file", type=str, default="ImageCap/data/coco/annotations/captions_train2014.json",
                         help="Path to annotation file")
-    parser.add_argument("--batch_size", type=int, default=8, help="Batch size for training")
+    parser.add_argument("--batch_size", type=int, default=4, help="Batch size for training")
     parser.add_argument("--learning_rate", type=float, default=5e-5, help="Learning rate")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of training epochs")
     parser.add_argument("--save_dir", type=str, default="ImageCap/checkpoints", help="Directory to save model checkpoints")

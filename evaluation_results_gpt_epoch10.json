@@ -1,0 +1,24 @@
+{
+  "model_checkpoint": "ImageCap/checkpoints/best_model_gpt_epoch10.pt",
+  "dataset_split": "val",
+  "number_of_images": 10,
+  "scores": {
+    "Bleu_1": 0.045112781954548035,
+    "Bleu_2": 6.056158724747425e-10,
+    "Bleu_3": 1.4806032039136548e-12,
+    "Bleu_4": 7.474302640396737e-14,
+    "CIDEr": 8.761812702425895e-05
+  },
+  "predictions": {
+    "391895": "largestrateds and largestrateds largestrateds and largestrateds largestrateds and largestrateds large",
+    "522418": "caption. coms coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. com",
+    "184613": "largestraw, largestraw, largestraw, largestraw, largestraw, largestraw, largestraw, large",
+    "318219": "caption. com caption. com caption. com caption. com caption. com caption. com caption. com capt",
+    "554625": "caption. com caption. com caption. com caption. com caption. com caption. com caption. com capt",
+    "397133": "caption. com caption. com caption. com caption. com caption. com caption. com caption. com capt",
+    "574769": "while, while, while, while, while, while, while, while, while, while, while,",
+    "60623": "on the floor of a large pictures on the floor of a large pictures on the floor of a large pictures on the floor of a la",
+    "309022": "caption. com.......................",
+    "5802": "computer. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. com"
+  }
+}

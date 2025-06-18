@@ -23,5 +23,7 @@ OUTPUT_FILE="evaluation_results_gpt_epoch10.json"
 #     --coco_dir $COCO_DIR \
 #     --split val \
 #     --output_file $OUTPUT_FILE \
-#     --batch_size 16
+#     --batch_size 16 \
+#     --limit 10 \
+#     --debug
     

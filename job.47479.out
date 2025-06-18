@@ -1,0 +1,32 @@
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+================================================================================
+IMAGE CAPTIONING EVALUATION
+================================================================================
+Loading model from ImageCap/checkpoints/best_model_gpt_epoch10.pt...
+Evaluating on validation set
+loading annotations into memory...
+Done (t=0.26s)
+creating index...
+index created!
+Limiting evaluation to 10 images
+Found 10 images for evaluation
+Generating captions:   0%|          | 0/1 [00:00<?, ?it/s]Generating captions: 100%|██████████| 1/1 [00:05<00:00,  5.58s/it]Generating captions: 100%|██████████| 1/1 [00:05<00:00,  5.58s/it]
+Image ID: 391895, Caption: largestrateds and largestrateds largestrateds and largestrateds largestrateds and largestrateds large
+Image ID: 522418, Caption: caption. coms coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. coms. com
+Image ID: 184613, Caption: largestraw, largestraw, largestraw, largestraw, largestraw, largestraw, largestraw, large
+Image ID: 318219, Caption: caption. com caption. com caption. com caption. com caption. com caption. com caption. com capt
+Image ID: 554625, Caption: caption. com caption. com caption. com caption. com caption. com caption. com caption. com capt
+
+Calculating evaluation scores:
+{'testlen': 133, 'reflen': 113, 'guess': [133, 123, 113, 104], 'correct': [6, 0, 0, 0]}
+ratio: 1.176991150432062
+Bleu_1: 0.0451
+Bleu_2: 0.0000
+Bleu_3: 0.0000
+Bleu_4: 0.0000
+CIDEr: 0.0001
+
+Results saved to evaluation_results_gpt_epoch10.json
+================================================================================
+EVALUATION COMPLETED
+================================================================================

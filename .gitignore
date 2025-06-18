@@ -27,8 +27,12 @@ var/
 
 # 数据和模型
 data/coco/
-checkpoints/
+ImageCap/checkpoints/
 results/
+coco2014
+ImageCap/Qwen3
+ImageCap/swinTransformer
+ImageCap/gpt2zh
 
 # IDE
 .idea/

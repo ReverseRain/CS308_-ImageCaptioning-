@@ -9,7 +9,6 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-
 class ImageCaptioningTrainer:
     """
     Trainer for image captioning model
@@ -20,9 +19,9 @@ class ImageCaptioningTrainer:
         model,
         train_dataset,
         val_dataset=None,
-        batch_size=8,
+        batch_size=4,
         learning_rate=5e-5,
-        num_epochs=10,
+        num_epochs=1,
         save_dir="./checkpoints",
         collate_fn=None,
         log_interval=10,
@@ -65,7 +64,6 @@ class ImageCaptioningTrainer:
         
         # Prepare model
         self.model.to(device)
-        
         # Setup multi-GPU if available and requested
         if self.use_multi_gpus and torch.cuda.device_count() > 1:
             print(f"Using {torch.cuda.device_count()} GPUs for training")
@@ -73,24 +71,29 @@ class ImageCaptioningTrainer:
         
         # Set up optimizer - only optimize projector and special token embeddings
         # Freeze vision encoder and language model parameters
-        for param in self.model.module.vision_encoder.parameters() if isinstance(self.model, nn.DataParallel) else self.model.vision_encoder.parameters():
-            param.requires_grad = False
+        # for param in self.model.module.vision_encoder.parameters() if isinstance(self.model, nn.DataParallel) else self.model.vision_encoder.parameters():
+        #     param.requires_grad = False
             
-        for param in self.model.module.language_model.parameters() if isinstance(self.model, nn.DataParallel) else self.model.language_model.parameters():
-            param.requires_grad = False
+        # for param in self.model.module.language_model.parameters() if isinstance(self.model, nn.DataParallel) else self.model.language_model.parameters():
+        #     param.requires_grad = False
             
         # Only train projector and token embeddings
-        if isinstance(self.model, nn.DataParallel):
-            trainable_params = [
-                {"params": self.model.module.projector.parameters()},
-                {"params": self.model.module.language_model.get_input_embeddings().parameters()}
+        # if isinstance(self.model, nn.DataParallel):
+        #     trainable_params = [
+        #         {"params": self.model.module.projector.parameters()}
+        #         # {"params": self.model.module.language_model.get_input_embeddings().parameters()}
+        #     ]
+        # else:
+        #     trainable_params = [
+        #         {"params": self.model.projector.parameters()}
+        #         # {"params": self.model.language_model.get_input_embeddings().parameters()}
+        #     ]
+        trainable_params = [
+                {"params": self.model.projector.parameters()}
+                # {"params": self.model.language_model.parameters()}
+                # {"params": self.model.vision_encoder.parameters()}
             ]
-        else:
-            trainable_params = [
-                {"params": self.model.projector.parameters()},
-                {"params": self.model.language_model.get_input_embeddings().parameters()}
-            ]
-        
+
         self.optimizer = optim.AdamW(trainable_params, lr=learning_rate)
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=num_epochs)
         

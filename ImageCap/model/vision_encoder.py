@@ -4,7 +4,7 @@ Vision encoder module using ViT
 
 import torch
 import torch.nn as nn
-from transformers import ViTModel, ViTConfig
+from transformers import ViTModel, ViTConfig,AutoModel
 
 
 class VisionEncoder(nn.Module):
@@ -12,7 +12,7 @@ class VisionEncoder(nn.Module):
     
     def __init__(self, model_path):
         super().__init__()
-        self.model = ViTModel.from_pretrained(model_path)
+        self.model = AutoModel.from_pretrained(model_path)
         self.hidden_size = self.model.config.hidden_size
         
     def forward(self, images):

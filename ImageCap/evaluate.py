@@ -130,40 +130,17 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
                 print(f"Error loading image {img_path}: {e}")
                 batch_images.append(Image.new("RGB", (224, 224), color="black"))  # placeholder for failed images
         
-        # # Preprocess images
-        # image_inputs = image_processor(images=batch_images, return_tensors="pt").to(args.device)
-        
-        # # Generate captions
-        # with torch.no_grad():
-        #     outputs = model(image_inputs.pixel_values)
         
         # Process generated captions
         prompt = " "
         input_ids = model.tokenizer(prompt, return_tensors='pt').input_ids.to(model.device)
         for j, img_id in enumerate(batch_image_ids):
-            # Determine the offset for decoding (196 patches + prompt length)
-            # prompt = model.image_token + " Caption: "
-            # prompt_ids = model.tokenizer(prompt, add_special_tokens=False).input_ids
-            # prompt_len = len(prompt_ids)
-            # offset = model.vision_encoder(image_inputs.pixel_values).shape[1] + prompt_len - 1
-            
-            # # Decode the caption
-            # if offset < outputs.shape[1]:
-            #     caption = model.tokenizer.decode(outputs[j][offset:], skip_special_tokens=True)
-            # else:
-            #     # Fallback to decoding the whole sequence
-            #     caption = model.tokenizer.decode(outputs[j], skip_special_tokens=True)
-            #     if model.image_token in caption:
-            #         caption = caption.split(model.image_token)[-1]
-            #     if "Caption:" in caption:
-            #         caption = caption.split("Caption:")[-1]
+
             
             image_tensor = image_processor(batch_images[j], return_tensors="pt").pixel_values.to(args.device)
-            # print("type",type(image_tensor),"   jusa ",type(batch_images[j]))
 
             vis_features = model.vision_encoder(image_tensor)
-            # vis_features = vis_features[:, 0, :].unsqueeze(0)
-            # print(vis_features.shape)
+
 
             mapped_vis = model.projector(vis_features)
 
@@ -172,10 +149,6 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
 
             text_embeds = model.language_model.get_input_embeddings()(input_ids)
             inputs_embeds = torch.cat([mapped_vis, text_embeds], dim=1)
-
-            # input_embeds = mapped_vis
-            # print(input_embeds.shape)
-            # break
 
 
             caption_tokens = model.language_model.generate(
@@ -199,27 +172,6 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
     
     return results
 
-# def generate_caption2(self, image, max_length=50):
-#         """为图像生成字幕"""
-#         image_tensor = self.preprocess_image(image).to(next(self.parameters()).device)
-
-#         vis_features = self.vision_encoder(image_tensor).last_hidden_state
-#         vis_features = vis_features[:, 0, :] 
-
-#         mapped_vis = self.connector(vis_features)
-
-#         input_embeds = mapped_vis.unsqueeze(0)
-
-#         caption_tokens = self.llm.generate(
-#             inputs_embeds=input_embeds,
-#             max_length=max_length,
-#             pad_token_id=self.tokenizer.pad_token_id,
-#             eos_token_id=self.tokenizer.eos_token_id,
-#             attention_mask=torch.ones(input_embeds.shape[:-1], dtype=torch.long, device=input_embeds.device)
-#         )
-        
-#         caption = self.tokenizer.decode(caption_tokens[0], skip_special_tokens=True)
-#         return caption
 
 def evaluate_captions(results, coco, args):
     """

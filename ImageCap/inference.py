@@ -212,16 +212,6 @@ def generate_caption(model, image_path, device, debug=False):
                 print(f"Prompt tokens: {prompt_ids}")
                 print(f"Prompt length: {prompt_len}")
             
-            # 获取生成的caption (跳过提示词部分)
-            # 我们需要找到实际生成的文本部分
-            # 通常是从序列的中间开始，跳过编码器输出的映射标记和提示词
-            
-            # 确定解码起始点
-            # 假设格式是: (视觉特征的映射) + (提示: [IMAGE] Caption:) + (生成的文本)
-            # 视觉特征映射的长度与patch数量有关
-            
-            # 对于标准ViT-base，224x224图像有196个patch (14x14)
-            # 加上提示词长度作为偏移
             offset = model.vision_encoder(image_inputs.pixel_values).shape[1] + prompt_len - 1
             
             if debug:

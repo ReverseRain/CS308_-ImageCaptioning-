@@ -69,25 +69,6 @@ class ImageCaptioningTrainer:
             print(f"Using {torch.cuda.device_count()} GPUs for training")
             self.model = nn.DataParallel(self.model)
         
-        # Set up optimizer - only optimize projector and special token embeddings
-        # Freeze vision encoder and language model parameters
-        # for param in self.model.module.vision_encoder.parameters() if isinstance(self.model, nn.DataParallel) else self.model.vision_encoder.parameters():
-        #     param.requires_grad = False
-            
-        # for param in self.model.module.language_model.parameters() if isinstance(self.model, nn.DataParallel) else self.model.language_model.parameters():
-        #     param.requires_grad = False
-            
-        # Only train projector and token embeddings
-        # if isinstance(self.model, nn.DataParallel):
-        #     trainable_params = [
-        #         {"params": self.model.module.projector.parameters()}
-        #         # {"params": self.model.module.language_model.get_input_embeddings().parameters()}
-        #     ]
-        # else:
-        #     trainable_params = [
-        #         {"params": self.model.projector.parameters()}
-        #         # {"params": self.model.language_model.get_input_embeddings().parameters()}
-        #     ]
         trainable_params = [
                 {"params": self.model.projector.parameters()}
                 # {"params": self.model.language_model.parameters()}

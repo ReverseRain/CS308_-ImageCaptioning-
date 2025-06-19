@@ -138,7 +138,7 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
         #     outputs = model(image_inputs.pixel_values)
         
         # Process generated captions
-        prompt = "caption"
+        prompt = " "
         input_ids = model.tokenizer(prompt, return_tensors='pt').input_ids.to(model.device)
         for j, img_id in enumerate(batch_image_ids):
             # Determine the offset for decoding (196 patches + prompt length)
@@ -162,7 +162,7 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
             # print("type",type(image_tensor),"   jusa ",type(batch_images[j]))
 
             vis_features = model.vision_encoder(image_tensor)
-            vis_features = vis_features[:, 0, :].unsqueeze(0)
+            # vis_features = vis_features[:, 0, :].unsqueeze(0)
             # print(vis_features.shape)
 
             mapped_vis = model.projector(vis_features)
@@ -180,12 +180,11 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
 
             caption_tokens = model.language_model.generate(
                 inputs_embeds=inputs_embeds,
-                max_length=50,
+                max_length=70,
                 pad_token_id=model.tokenizer.pad_token_id,
                 eos_token_id=model.tokenizer.eos_token_id,
                 attention_mask=torch.ones(inputs_embeds.shape[:-1], dtype=torch.long, device=inputs_embeds.device)
             )
-            
             caption = model.tokenizer.decode(caption_tokens[0], skip_special_tokens=True)
 
             # Clean up the caption

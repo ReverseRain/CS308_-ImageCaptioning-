@@ -105,6 +105,11 @@ def prepare_coco_data(args):
     
     return coco, image_ids, image_folder
 
+def split_caption_at_dot(caption):
+    dot_index = caption.find('.')
+    if dot_index != -1:
+        return caption[:dot_index]
+    return caption
 
 def generate_captions(model, image_processor, coco, image_ids, image_folder, args):
     """
@@ -189,6 +194,7 @@ def generate_captions(model, image_processor, coco, image_ids, image_folder, arg
 
             # Clean up the caption
             caption = caption.strip()
+            caption = split_caption_at_dot(caption)
             
             # Save the result
             results[img_id] = caption

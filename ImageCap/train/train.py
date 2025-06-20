@@ -24,7 +24,7 @@ def parse_args():
                         help="Path to annotation file")
     parser.add_argument("--batch_size", type=int, default=4, help="Batch size for training")
     parser.add_argument("--learning_rate", type=float, default=5e-5, help="Learning rate")
-    parser.add_argument("--num_epochs", type=int, default=1, help="Number of training epochs")
+    parser.add_argument("--num_epochs", type=int, default=2, help="Number of training epochs")
     parser.add_argument("--save_dir", type=str, default="ImageCap/checkpoints", help="Directory to save model checkpoints")
     parser.add_argument("--log_interval", type=int, default=10, help="Log interval")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu",

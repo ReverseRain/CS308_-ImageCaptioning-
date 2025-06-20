@@ -4,11 +4,53 @@ Image captioning model combining vision encoder, projector and language model
 
 import torch
 import torch.nn as nn
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer,BertConfig,BertLMHeadModel
 
 from .vision_encoder import VisionEncoder
 from .projector import MLPProjector
 from peft import LoraConfig, get_peft_model
+
+
+class QFormerConnector(nn.Module):
+    def __init__(self, in_dim, out_dim, num_query_tokens=32, cross_attn_freq=2):
+        super().__init__()
+        encoder_config = BertConfig.from_pretrained("bert-base-uncased")
+        encoder_config.encoder_width = in_dim 
+        encoder_config.is_decoder = True
+        encoder_config.add_cross_attention = True
+        encoder_config.output_hidden_states = True
+        encoder_config.cross_attention_freq = cross_attn_freq
+        encoder_config.query_length = num_query_tokens
+        
+        self.qformer = BertLMHeadModel(config=encoder_config)
+        
+        # 可学习的查询向量（信息提取的核心）[1,6](@ref)
+        self.query_tokens = nn.Parameter(
+            torch.zeros(1, num_query_tokens, encoder_config.hidden_size)
+        )
+        nn.init.normal_(self.query_tokens, std=encoder_config.initializer_range)
+        
+        # 输出投影层（对齐LLM输入维度）[1,2](@ref)
+        self.proj = nn.Linear(encoder_config.hidden_size, out_dim)
+        self.num_query_tokens = num_query_tokens
+
+    def forward(self, image_embeds):
+        """
+        image_embeds: [batch, seq_len, in_dim] 视觉特征
+        返回: [batch, num_query_tokens, out_dim] 适配语言模型的视觉表示
+        """
+        batch_size = image_embeds.size(0)
+        query_embeds = self.query_tokens.expand(batch_size, -1, -1)
+        
+        outputs = self.qformer(
+            inputs_embeds=query_embeds,
+            encoder_hidden_states=image_embeds,
+            return_dict=True
+        )
+        
+        # print("Output keys:", list(outputs.keys()))
+        last_hidden = outputs.hidden_states[-1]  # [batch, num_query, hidden]
+        return self.proj(last_hidden)  # [batch, num_query, out_dim]
 
 
 class ImageCaptioningModel(nn.Module):
@@ -80,11 +122,12 @@ class ImageCaptioningModel(nn.Module):
     def build_connector(self, in_dim, out_dim):
         """构建视觉-语言连接器"""
         
-        return nn.Sequential(
-            nn.Linear(in_dim, out_dim * 2),
-            nn.ReLU(),
-            nn.Linear(out_dim * 2, out_dim)
-        )
+        # return nn.Sequential(
+        #     nn.Linear(in_dim, out_dim * 2),
+        #     nn.ReLU(),
+        #     nn.Linear(out_dim * 2, out_dim)
+        # )
+        return QFormerConnector(in_dim,out_dim)
     
     # def forward(self, images, captions=None):
     #     """

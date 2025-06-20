@@ -74,8 +74,7 @@ def get_image_processor(model):
     """
     Get image processor for the vision encoder
     """
-    # return ViTImageProcessor.from_pretrained(model.vision_encoder.model.config._name_or_path)
-    return AutoImageProcessor.from_pretrained(model.vision_encoder.model.config._name_or_path,use_fast=True)
+    return ViTImageProcessor.from_pretrained(model.vision_encoder.model.config._name_or_path)
 
 
 def prepare_coco_data(args):
@@ -209,16 +208,24 @@ def evaluate_captions(results, coco, args):
     return scores, gts, res
 
 
-def save_results(results, scores, args):
+def save_results(results, scores, gts, args):
     """
-    Save evaluation results to a JSON file
+    Save evaluation results to a JSON file with both predictions and ground truth
     """
+    # Restructure data to include both predictions and ground truth for each image
+    image_data = {}
+    for img_id in results.keys():
+        image_data[img_id] = {
+            "prediction": results[img_id],
+            "ground_truth": gts.get(img_id, [])
+        }
+    
     output = {
         "model_checkpoint": args.checkpoint_path,
         "dataset_split": args.split,
         "number_of_images": len(results),
         "scores": scores,
-        "predictions": results
+        "images": image_data
     }
     
     with open(args.output_file, "w") as f:
@@ -290,7 +297,7 @@ def main():
     scores, gts, res = evaluate_captions(results, coco, args)
     
     # Save results
-    save_results(results, scores, args)
+    save_results(results, scores, gts, args)
     
     # Save some examples (if not limited to validation set)
     if not args.debug and args.split != "test":

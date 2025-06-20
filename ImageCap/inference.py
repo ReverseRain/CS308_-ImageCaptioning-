@@ -9,7 +9,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import traceback
 import sys
-from transformers import ViTImageProcessor, AutoTokenizer
+from transformers import ViTImageProcessor
 
 from ImageCap.model.image_captioning_model import ImageCaptioningModel
 

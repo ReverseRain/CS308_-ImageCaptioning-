@@ -7,7 +7,7 @@ import json
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
-from transformers import ViTImageProcessor,AutoImageProcessor
+from transformers import ViTImageProcessor
 from tqdm import tqdm  # 导入 tqdm 进度条库
 
 class COCOCaptionDataset(Dataset):
@@ -55,7 +55,7 @@ class COCOCaptionDataset(Dataset):
         
         # Image processor for ViT
         print("path of process ",image_processor_path)
-        self.image_processor = AutoImageProcessor.from_pretrained(image_processor_path,use_fast=True)
+        self.image_processor = ViTImageProcessor.from_pretrained(image_processor_path)
     
     def __len__(self):
         return len(self.data)

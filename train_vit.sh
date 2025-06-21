@@ -19,5 +19,5 @@ python -m ImageCap.train.train \
     --num_epochs 1 \
     --save_dir $SAVE_DIR \
     --log_interval 10 \
-    --device cuda:2 \
-    --max_samples 140000
+    --device cuda:5
+    # --max_samples 140000

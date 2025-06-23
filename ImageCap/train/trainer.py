@@ -155,7 +155,7 @@ class ImageCaptioningTrainer:
             # Save best model
             if avg_train_loss < best_loss:
                 best_loss = avg_train_loss
-                best_model_path = os.path.join(self.save_dir, "best_model.pt")
+                best_model_path = os.path.join(self.save_dir, "best_model_mamba.pt")
                 self.save_checkpoint(best_model_path)
                 print(f"Best model saved to {best_model_path}")
     

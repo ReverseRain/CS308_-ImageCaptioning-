@@ -40,8 +40,11 @@ class COCOCaptionDataset(Dataset):
         if max_samples is not None and max_samples < len(annotations):
             annotations = annotations[:max_samples]
             print(f"Using {max_samples} samples out of {len(self.annotations['annotations'])}")
-        
+        cnt=0
         for ann in tqdm(annotations, desc="Processing images"):
+            cnt+=1
+            if(cnt>11000):
+                break
             image_id = ann['image_id']
             caption = ann['caption']
             image_filename = image_id_to_file.get(image_id)  # O(1)查询
